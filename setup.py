@@ -4,10 +4,16 @@ import retox
 
 with open('README.rst') as readme:
     long_description = readme.read()
-with open('requirements.txt') as req:
-    requirements = req.readlines()
+
 
 _version = retox.__version__
+
+requirements = [
+    'tox==2.9.1',
+    'eventlet==0.21.0',
+    'click==6.7',
+    'asciimatics==1.9.0'
+]
 
 def main():
     setup(
@@ -16,7 +22,7 @@ def main():
         long_description=long_description,
         version=_version,
         url='https://github.com/tonybaloney/retox',
-        license='APACHE-2',
+        license='MIT',
         platforms=['unix', 'linux', 'osx', 'cygwin', 'win32'],
         author='Anthony Shaw',
         classifiers=['Development Status :: 4 - Beta',
@@ -32,8 +38,8 @@ def main():
                      ],
         packages=['retox', ],
         install_requires=[requirements],
-        entry_points={'console_scripts': 'retox=retox.main:main',
-                      'tox': ['proclimit = retox.tox_proclimit']},
+        entry_points={'console_scripts': 'retox=retox:main',
+                      'tox': ['proclimit = retox.proclimit']},
     )
 
 if __name__ == '__main__':
