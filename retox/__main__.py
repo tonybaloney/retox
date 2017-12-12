@@ -6,14 +6,12 @@ import click
 from tox.session import prepare
 
 from retox.service import RetoxService
-from retox.log import RetoxLogging
-
-logger = RetoxLogging()
+from retox.log import retox_log
 
 
 @click.command()
 def main(args=None):
-    logger.debug("Starting command")
+    retox_log.debug("Starting command")
     tox_args = prepare(args)
     service = RetoxService(tox_args, logger)
     service.start()

@@ -6,12 +6,13 @@ import eventlet
 import tox.session
 from eventlet import GreenPool
 from retox.reporter import RetoxReporter
+from retox.log import retox_log
 
 
 class RetoxService(object):
     def __init__(self, toxconfig, logger):
         self._toxconfig = toxconfig
-        self._logger = logger
+        self._logger = retox_log
         self._logger.debug('Instantiated service')
         self._resources = Resources(self)
 
