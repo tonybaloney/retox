@@ -12,7 +12,8 @@ requirements = [
     'tox==2.9.1',
     'eventlet==0.21.0',
     'click==6.7',
-    'asciimatics==1.9.0'
+    'asciimatics==1.9.0',
+    'colorlog'
 ]
 
 def main():
