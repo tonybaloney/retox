@@ -1,20 +1,24 @@
 # -*- coding: utf-8 -*-
+
 from  __future__ import absolute_import
 
-from eventlet.green.subprocess import Popen, PIPE, STDOUT
+from eventlet.green.subprocess import Popen
 import eventlet
-import tox.session
 from eventlet import GreenPool
+
+import tox.session
+
 from retox.reporter import RetoxReporter
 from retox.log import retox_log
 
 
 class RetoxService(object):
-    def __init__(self, toxconfig, logger):
+    def __init__(self, toxconfig, screen):
         self._toxconfig = toxconfig
         self._logger = retox_log
         self._logger.debug('Instantiated service')
         self._resources = Resources(self)
+        RetoxReporter.screen = screen
 
     def start(self):
         self._logger.debug('Starting threads')
