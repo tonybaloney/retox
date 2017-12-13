@@ -1,5 +1,5 @@
 ReTox
-~~~~~
+=====
 
 A command line service that runs your tox tests in parallel, using threading and multicore CPUs.
 

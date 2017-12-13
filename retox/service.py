@@ -21,10 +21,7 @@ class RetoxService(object):
         RetoxReporter.screen = screen
 
     def start(self):
-        self._logger.debug('Starting threads')
-        if self.toxsession.report.tw.hasmarkup:
-            self._logger.debug('Spawning process')
-            eventlet.spawn_n(self.toxsession.report._loopreport)
+        eventlet.spawn_n(self.toxsession.report._loopreport)
 
     @property
     def toxsession(self):
@@ -83,8 +80,7 @@ class RetoxService(object):
             if venv and sdist:
                 if self.toxsession.installpkg(venv, sdist):
                     self.toxsession.runtestenv(venv, redirect=True)
-                else:
-                    import pdb; pdb.set_trace()
+
 
     def getresources(self, *specs):
         return self._resources.getresources(*specs)

@@ -80,7 +80,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
         '''
         Move laggard tasks over
         '''
-        retox_log.debug("Completing %s with status %s" % (self.name, status))
+        retox_log.info("Completing %s with status %s" % (self.name, status))
         result = Screen.COLOUR_GREEN if not status else Screen.COLOUR_RED
         self.palette['title'] = (Screen.COLOUR_WHITE, Screen.A_BOLD, result)
         for item in list(self._task_view.options):

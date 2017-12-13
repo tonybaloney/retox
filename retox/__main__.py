@@ -28,7 +28,6 @@ def main(watch, args=None):
     tox_args = prepare(args)
     screen = Screen.open()
     service = RetoxService(tox_args, screen)
-    service.start()
 
     needs_update = True
     running = True
@@ -39,6 +38,7 @@ def main(watch, args=None):
     screen.print_at('Commands : (q) quit (b) build', 1, screen.height - 1)
 
     _watches = [get_hashes(w) for w in watch]
+    service.start()
 
     while running:
         if needs_update:

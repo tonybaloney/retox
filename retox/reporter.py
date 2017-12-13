@@ -86,7 +86,11 @@ class RetoxReporter(tox.session.Reporter):
         for frame_name, frame in self._env_screens.items():
             for venv in self.session.venvlist:
                 if venv.name == frame_name:
-                    frame.finish(venv.status)
+                    try:
+                        frame.finish(venv.status)
+                    except AttributeError:
+                        frame.finish(None)
+                venv.finish()
 
         super(RetoxReporter, self).startsummary()
 

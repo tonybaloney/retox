@@ -18,7 +18,7 @@ requirements = [
 def main():
     setup(
         name='retox',
-        description='distributing activities of the tox tool',
+        description='A parallel service for tox',
         long_description=long_description,
         version=_version,
         url='https://github.com/tonybaloney/retox',
