@@ -2,24 +2,11 @@
 
 import tox.session
 import eventlet
+from asciimatics.scene import Scene
 
-from random import randint
-from asciimatics.screen import Screen
 
+from retox.ui import VirtualEnvironmentFrame
 from retox.log import retox_log
-
-
-HEIGHTS = {
-    'runtests': 4,
-    'command': 5,
-    'installdeps': 6,
-    'installpkg': 7,
-    'inst': 8,
-    'inst-nodeps': 9,
-    'sdist-make': 10,
-    'create': 11,
-    'recreate': 12
-}
 
 SHIFT = 20
 
@@ -52,13 +39,16 @@ class RetoxReporter(tox.session.Reporter):
         self.tw = FakeTerminalWriter()
 
         self._env_screens = {}
-        offset = 0
+        count = 0
         for env in session.config.envlist:
-            self._env_screens[env] = VirtualEnvironment(
+            self._env_screens[env] = VirtualEnvironmentFrame(
+                self.screen,
                 env,
-                offset,
-                self.screen)
-            offset = offset + SHIFT
+                self._env_count,
+                count)
+            count = count + 1
+        self._scene = Scene([frame for _, frame in self._env_screens.items()], -1, name="Retox")
+        self.screen.set_scenes([self._scene], start_scene=self._scene)
 
     def _loopreport(self):
         while 1:
@@ -87,6 +77,7 @@ class RetoxReporter(tox.session.Reporter):
                         screen.update_action(action_name)
 
             assert not ac2popenlist, ac2popenlist
+            self.screen.draw_next_frame(repeat=False)
 
     def logaction_start(self, action):
         if action.venv is not None:
@@ -99,29 +90,3 @@ class RetoxReporter(tox.session.Reporter):
             retox_log.debug("Finished: %s %s" % (action.venv.name, action.activity))
             self._env_screens[action.venv.name].stop(action.activity)
         super(RetoxReporter, self).logaction_finish(action)
-
-
-class VirtualEnvironment(object):
-    def __init__(self, venv_name, start_col, screen):
-        self.name = venv_name
-        self.start_col = start_col
-        self._screen = screen
-
-        # Draw a box for the environment
-        self._screen.fill_polygon([(start_col, 1),
-                                   (start_col+SHIFT, 1),
-                                   (start_col+SHIFT, 22),
-                                   (start_col, 22)], colour=3, bg=4)
-        self._screen.refresh()
-
-    def start(self, activity):
-        self._screen.print_at('Started %s' % (activity), self.start_col, HEIGHTS.get(activity, 20))
-        self._screen.refresh()
-
-    def stop(self, activity):
-        self._screen.print_at('Finished %s' % (activity), self.start_col, HEIGHTS.get(activity, 20))
-        self._screen.refresh()
-
-    def update_action(self, action_name):
-        # self._screen.print_at(action_name, self.start_col, HEIGHTS[action_name])
-        self._screen.refresh()

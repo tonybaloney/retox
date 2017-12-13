@@ -19,7 +19,8 @@ def main(args=None):
     service.start()
     service.run(tox_args.envlist)
     retox_log.debug("Finished")
-    Screen.close(screen)
+    screen.clear()
+    screen.close(restore=True)
 
 if __name__ == '__main__':
     main()

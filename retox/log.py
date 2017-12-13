@@ -3,10 +3,19 @@ import logging
 
 
 class RetoxLogging(object):
+    '''
+    Create a special logging class that redirects stdout 
+    so it doesnt interfere with the screen session
+    Write logging output to a file retox.log
+    '''
+
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger('retox')
+        self.logger.propagate = False
         handler = logging.FileHandler('retox.log')
+        self.logger.handlers = []
         self.logger.addHandler(handler)
+        self.logger.level = logging.DEBUG
 
     def debug(self, *args):
         self.logger.debug(*args)
@@ -32,6 +41,6 @@ class RetoxLogging(object):
     def addHandler(self, handler):
         self.logger.addHandler(handler)
 
-retox_log = RetoxLogging()
-
 logging.basicConfig(level=logging.ERROR)
+
+retox_log = RetoxLogging()
