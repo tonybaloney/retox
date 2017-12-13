@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
-LEVEL = logging.DEBUG
+LEVEL = logging.INFO
+
 
 class RetoxLogging(object):
     '''

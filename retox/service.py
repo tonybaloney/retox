@@ -78,8 +78,9 @@ class RetoxService(object):
             self._sdistpath = sdist
 
             self._logger.debug('Running tests')
-            venv.status = 0
+            
             if venv and sdist:
+                venv.status = 0
                 if self.toxsession.installpkg(venv, sdist):
                     self.toxsession.runtestenv(venv, redirect=True)
                 else:

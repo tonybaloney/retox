@@ -59,7 +59,6 @@ def main(watch, args=None):
             elif event.key_code == ord('b'):
                 needs_update = True
             elif event.key_code == ord('r'):
-                service._toxconfig.recreate = True
                 needs_update = True
 
     # TODO : Extra key for rebuilding tox virtualenvs
