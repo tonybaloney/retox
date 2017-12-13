@@ -11,8 +11,7 @@ _version = retox.__version__
 requirements = [
     'tox==2.9.1',
     'eventlet==0.21.0',
-    'click==6.7',
-    'asciimatics==1.9.0',
+    'asciimatics==1.9.1.dev2+ga4c95b2',
 ]
 
 def main():
