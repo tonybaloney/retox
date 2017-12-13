@@ -53,7 +53,6 @@ class RetoxReporter(tox.session.Reporter):
     def _loopreport(self):
         while 1:
             eventlet.sleep(0.2)
-            updates = []
             ac2popenlist = {}
             for action in self.session._actions:
                 for popen in action._popenlist:
@@ -64,29 +63,24 @@ class RetoxReporter(tox.session.Reporter):
                     super(RetoxReporter, self).logaction_finish(action)
                     self._actionmayfinish.remove(action)
 
-            for action_name in self.sortorder:
-                try:
-                    popenlist = ac2popenlist.pop(action_name)
-                except KeyError:
-                    continue
-
-                for popen in popenlist:
-                    name = getattr(popen.action.venv, 'name', "INLINE")
-                    screen = self._env_screens.get(name, None)
-                    if screen:
-                        screen.update_action(action_name)
-
-            assert not ac2popenlist, ac2popenlist
             self.screen.draw_next_frame(repeat=False)
 
     def logaction_start(self, action):
         if action.venv is not None:
             retox_log.debug("Started: %s %s" % (action.venv.name, action.activity))
-            self._env_screens[action.venv.name].start(action.activity)
+            self._env_screens[action.venv.name].start(action.activity, action)
         super(RetoxReporter, self).logaction_start(action)
 
     def logaction_finish(self, action):
         if action.venv is not None:
             retox_log.debug("Finished: %s %s" % (action.venv.name, action.activity))
-            self._env_screens[action.venv.name].stop(action.activity)
+            self._env_screens[action.venv.name].stop(action.activity, action)
         super(RetoxReporter, self).logaction_finish(action)
+
+    def error(self, msg):
+        # TODO : Raise errors in a panel
+        self.logline("ERROR: " + msg, red=True)
+
+    def startsummary(self):
+        retox_log.debug("Starting summary")
+        super(RetoxReporter, self).startsummary()
