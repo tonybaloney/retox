@@ -5,7 +5,6 @@ import time
 import os
 import click
 
-
 from tox.session import prepare
 from asciimatics.screen import Screen
 from asciimatics.event import KeyboardEvent
@@ -65,7 +64,6 @@ def main(debug, watch, args=None):
             elif event.key_code == ord('b'):
                 needs_update = True
 
-    # TODO : Go back and start again when files have changed.
     # TODO : Extra key for rebuilding tox virtualenvs
     retox_log.debug("Finished and exiting")
     screen.clear()

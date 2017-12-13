@@ -83,9 +83,11 @@ class RetoxReporter(tox.session.Reporter):
 
     def startsummary(self):
         retox_log.debug("Starting summary")
-        for _, frame in self._env_screens.items():
-            frame.finish()
-            
+        for frame_name, frame in self._env_screens.items():
+            for venv in self.session.venvlist:
+                if venv.name == frame_name:
+                    frame.finish(venv.status)
+
         super(RetoxReporter, self).startsummary()
 
     def reset(self):

@@ -76,11 +76,13 @@ class VirtualEnvironmentFrame(widgets.Frame):
         self._screen.force_update()
         self._screen.refresh()
 
-    def finish(self):
+    def finish(self, status):
         '''
         Move laggard tasks over
         '''
-        self.palette['title'] = (Screen.COLOUR_WHITE, Screen.A_BOLD, Screen.COLOUR_GREEN)
+        retox_log.debug("Completing %s with status %s" % (self.name, status))
+        result = Screen.COLOUR_GREEN if not status else Screen.COLOUR_RED
+        self.palette['title'] = (Screen.COLOUR_WHITE, Screen.A_BOLD, result)
         for item in list(self._task_view.options):
             self._task_view.options.remove(item)
             self._completed_view.options.append(item)
