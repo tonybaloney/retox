@@ -2,4 +2,4 @@ import unittest
 
 class TestNothing(unittest.TestCase):
     def test_nothing(self):
-        assert 1 is 2
+        assert 1 == 1

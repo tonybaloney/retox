@@ -37,6 +37,11 @@ class RetoxService(object):
             return self._toxsession
 
     def run(self, envlist):
+        self._logger.info(' ')
+        self._logger.info(' ')
+        self._logger.info(' ')
+        self._logger.info(' ---- Starting new test run ----')
+
         self._toxsession.report.reset()
         pool = GreenPool(size=self._toxconfig.option.numproc)
         for env in envlist:
@@ -63,18 +68,23 @@ class RetoxService(object):
 
     def runtests(self, venvname):
         if self.toxsession.config.option.sdistonly:
+            self._logger.debug('Getting sdist resources')
             self._sdistpath = self.getresources("sdist")
             return
         if self.toxsession.config.skipsdist:
+            self._logger.debug('Skipping sdist')
             venv, = self.getresources("venv:%s" % venvname)
             if venv:
                 self.toxsession.runtestenv(venv, redirect=True)
         else:
             venv, sdist = self.getresources("venv:%s" % venvname, "sdist")
             self._sdistpath = sdist
+            self._logger.debug('Running tests')
             if venv and sdist:
                 if self.toxsession.installpkg(venv, sdist):
                     self.toxsession.runtestenv(venv, redirect=True)
+                else:
+                    import pdb; pdb.set_trace()
 
     def getresources(self, *specs):
         return self._resources.getresources(*specs)

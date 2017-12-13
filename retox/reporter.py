@@ -91,5 +91,7 @@ class RetoxReporter(tox.session.Reporter):
         super(RetoxReporter, self).startsummary()
 
     def reset(self):
+        self._actionmayfinish = set()
+
         for _, frame in self._env_screens.items():
             frame.reset()

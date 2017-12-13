@@ -2,6 +2,7 @@
 
 from tox import hookimpl
 
+
 @hookimpl
 def tox_addoption(parser):
     parser.add_argument(

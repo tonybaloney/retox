@@ -10,12 +10,13 @@ from asciimatics.screen import Screen
 from asciimatics.event import KeyboardEvent
 from retox.service import RetoxService
 
+DEBUG = True
 
-@click.option('--debug', is_flag=True)
+
 @click.option('--watch', '-w', multiple=True)
 @click.command()
-def main(debug, watch, args=None):
-    if debug:
+def main(watch, args=None):
+    if DEBUG:
         import retox.log
         import logging
         retox.log.LEVEL = logging.DEBUG
@@ -62,6 +63,9 @@ def main(debug, watch, args=None):
             if event.key_code == ord('q'):
                 running = False
             elif event.key_code == ord('b'):
+                needs_update = True
+            elif event.key_code == ord('r'):
+                service._toxconfig.recreate = True
                 needs_update = True
 
     # TODO : Extra key for rebuilding tox virtualenvs
