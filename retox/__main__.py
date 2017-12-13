@@ -10,24 +10,18 @@ from asciimatics.screen import Screen
 from asciimatics.event import KeyboardEvent
 from retox.service import RetoxService
 
-DEBUG = True
+from retox.log import retox_log
 
 
 @click.option('--watch', '-w', multiple=True)
 @click.command()
 def main(watch, args=None):
-    if DEBUG:
-        import retox.log
-        import logging
-        retox.log.LEVEL = logging.DEBUG
-
-    from retox.log import retox_log
-
     retox_log.debug("Starting command")
 
     tox_args = prepare(args)
     screen = Screen.open()
     service = RetoxService(tox_args, screen)
+    service.start()
 
     needs_update = True
     running = True
@@ -38,13 +32,13 @@ def main(watch, args=None):
     screen.print_at('Commands : (q) quit (b) build', 1, screen.height - 1)
 
     _watches = [get_hashes(w) for w in watch]
-    service.start()
 
     while running:
         if needs_update:
             screen.print_at('Status : Running  ', 1, 1)
             screen.refresh()
-            service.run(tox_args.envlist)
+            out = service.run(tox_args.envlist)
+            screen.print_at('Result : %s  ' % out , 1, 3)
             needs_update = False
         else:
             time.sleep(.5)

@@ -76,11 +76,16 @@ class RetoxService(object):
         else:
             venv, sdist = self.getresources("venv:%s" % venvname, "sdist")
             self._sdistpath = sdist
+
             self._logger.debug('Running tests')
+            venv.status = 0
             if venv and sdist:
                 if self.toxsession.installpkg(venv, sdist):
                     self.toxsession.runtestenv(venv, redirect=True)
-
+                else:
+                    self._logger.debug('Failed installing package')
+            else:
+                self._logger.debug('VirtualEnv doesnt exist')
 
     def getresources(self, *specs):
         return self._resources.getresources(*specs)
