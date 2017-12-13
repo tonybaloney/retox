@@ -9,7 +9,10 @@ Usage
 -----
 
 To install, run 
-`pip install detox`
+
+.. code-block:: bash
+
+    pip install detox
 
 Then from any project that has a `tox.ini` file setup and using tox, you can simply run
 
@@ -28,8 +31,8 @@ Retox can watch one or many directories for file changes and re-run the tox envi
 
     retox -w my_project_folder -w my_test_folder
 
-
 Credits
 -------
 
-This was inspired by detox
+This was inspired by the detox project, which was created by the tox development team. I worked and then significantly changed the way it works
+to support re-running environments with ease
