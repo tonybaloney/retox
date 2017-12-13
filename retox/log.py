@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-
+LEVEL = logging.INFO
 
 class RetoxLogging(object):
     '''
@@ -15,7 +15,7 @@ class RetoxLogging(object):
         handler = logging.FileHandler('retox.log')
         self.logger.handlers = []
         self.logger.addHandler(handler)
-        self.logger.level = logging.DEBUG
+        self.logger.level = LEVEL
 
     def debug(self, *args):
         self.logger.debug(*args)

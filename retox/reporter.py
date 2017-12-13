@@ -3,7 +3,7 @@
 import tox.session
 import eventlet
 from asciimatics.scene import Scene
-
+from asciimatics.screen import Screen
 
 from retox.ui import VirtualEnvironmentFrame
 from retox.log import retox_log
@@ -21,7 +21,7 @@ class FakeTerminalWriter(object):
         return '-'
 
     def line(self, msg, *args, **kargs):
-        retox_log.debug("Captured from tox: " + msg)
+        retox_log.info("tox: " + msg)
 
 
 class RetoxReporter(tox.session.Reporter):
@@ -83,4 +83,11 @@ class RetoxReporter(tox.session.Reporter):
 
     def startsummary(self):
         retox_log.debug("Starting summary")
+        for _, frame in self._env_screens.items():
+            frame.finish()
+            
         super(RetoxReporter, self).startsummary()
+
+    def reset(self):
+        for _, frame in self._env_screens.items():
+            frame.reset()

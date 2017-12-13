@@ -1,4 +1,5 @@
 import asciimatics.widgets as widgets
+from asciimatics.screen import Screen
 from retox.log import retox_log
 GLOBAL_COUNT = 0
 
@@ -38,40 +39,61 @@ class VirtualEnvironmentFrame(widgets.Frame):
         completed_layout = widgets.Layout([10], fill_frame=False)
         self.add_layout(completed_layout)
         self._task_view = widgets.ListBox(
-                    8,
+                    10,
                     [],
                     name="Tasks",
                     label="Running"
-                    # on_change=self._on_pick
                     )
         self._completed_view = widgets.ListBox(
-                    8,
+                    10,
                     [],
                     name="Completed",
                     label="Completed"
-                    # on_change=self._on_pick
                     )
         task_layout.add_widget(self._task_view)
         completed_layout.add_widget(self._completed_view)
         self.fix()
 
     def start(self, activity, action):
+        '''
+        Mark an action as started
+        '''
         self._task_view.options.append((TASK_NAMES.get(activity, activity), self.name))
         self._task_view.update(1)
         self._screen.force_update()
         self._screen.refresh()
 
     def stop(self, activity, action):
+        '''
+        Mark a task as completed
+        '''
         try:
             self._task_view.options.remove((TASK_NAMES.get(activity, activity), self.name))
         except ValueError:
-            retox_log.error("Could not find action %s in env %s" % (activity, self.name))
+            retox_log.debug("Could not find action %s in env %s" % (activity, self.name))
         self._completed_view.options.append((TASK_NAMES.get(activity, activity), self.name))
         self._completed_view.update(1)
         self._screen.force_update()
         self._screen.refresh()
 
-    def update_action(self, action_name):
-        if (activity, action) not in self._task_view.options:
-            self._task_view.options.append((activity, action))
+    def finish(self):
+        '''
+        Move laggard tasks over
+        '''
+        self.palette['title'] = (Screen.COLOUR_WHITE, Screen.A_BOLD, Screen.COLOUR_GREEN)
+        for item in list(self._task_view.options):
+            self._task_view.options.remove(item)
+            self._completed_view.options.append(item)
+        self._screen.force_update()
         self._screen.refresh()
+        self._update(1)
+
+
+    def reset(self):
+        '''
+        Reset the frame between jobs
+        '''
+        self.palette['title'] = (Screen.COLOUR_WHITE, Screen.A_BOLD, Screen.COLOUR_BLUE)
+        self._completed_view.options = []
+        self._task_view.options = []
+        self._update(1)

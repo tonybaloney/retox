@@ -37,6 +37,7 @@ class RetoxService(object):
             return self._toxsession
 
     def run(self, envlist):
+        self._toxsession.report.reset()
         pool = GreenPool(size=self._toxconfig.option.numproc)
         for env in envlist:
             pool.spawn_n(self.runtests, env)

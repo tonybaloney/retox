@@ -39,8 +39,8 @@ def main():
                      ],
         packages=['retox', ],
         install_requires=[requirements],
-        entry_points={'console_scripts': 'retox=retox:main',
-                      'tox': ['proclimit = retox.proclimit']},
+        entry_points={'console_scripts': 'retox=retox.__main__:main',
+                      'tox': ['proclimit = retox.proclimit', 'watch = retox.watch']},
     )
 
 if __name__ == '__main__':
