@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
+
 import time
 import os
 import click
@@ -25,20 +26,20 @@ def main(watch, args=None):
 
     needs_update = True
     running = True
-    screen.print_at('Status : Starting  ', 1, 1)
+    screen.print_at(u'Status : Starting  ', 1, 1)
     if watch:
-        screen.print_at('Watching : %s  ' % ', '.join(watch), 1, 2)
+        screen.print_at(u'Watching : %s  ' % ', '.join(watch), 1, 2)
 
-    screen.print_at('Commands : (q) quit (b) build', 1, screen.height - 1)
+    screen.print_at(u'Commands : (q) quit (b) build', 1, screen.height - 1)
 
     _watches = [get_hashes(w) for w in watch]
 
     while running:
         if needs_update:
-            screen.print_at('Status : Running  ', 1, 1)
+            screen.print_at(u'Status : Running  ', 1, 1)
             screen.refresh()
             out = service.run(tox_args.envlist)
-            screen.print_at('Result : %s  ' % out , 1, 3)
+            screen.print_at(u'Result : %s  ' % out , 1, 3)
             needs_update = False
         else:
             time.sleep(.5)
@@ -50,7 +51,7 @@ def main(watch, args=None):
             needs_update = any(x != y for x, y in changes)
             _watches = _new_watches
 
-        screen.print_at('Status : Waiting  ', 1, 1)
+        screen.print_at(u'Status : Waiting  ', 1, 1)
         screen.refresh()
         event = screen.get_event()
         if isinstance(event, KeyboardEvent):
@@ -62,7 +63,7 @@ def main(watch, args=None):
                 needs_update = True
 
     # TODO : Extra key for rebuilding tox virtualenvs
-    retox_log.debug("Finished and exiting")
+    retox_log.debug(u"Finished and exiting")
     screen.clear()
     screen.close(restore=True)
 

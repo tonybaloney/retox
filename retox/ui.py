@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import asciimatics.widgets as widgets
 from asciimatics.screen import Screen
 from retox.log import retox_log
