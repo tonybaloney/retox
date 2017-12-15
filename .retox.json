@@ -1,8 +1,8 @@
 {
   "installpkg": {
     "basename": "retox-1.1.1.zip", 
-    "sha256": "b66fc1a590a496e8042c763aed3c4dfed2ebcd163ddb7019f81f15e140e616ca", 
-    "md5": "82478d6e0de896586bb2b201487f8c18"
+    "sha256": "2c56fed826761fb9c721e34dcc9dfe0c542f875078108ee1a3341326569c8a02", 
+    "md5": "87861e2500daef4205c06e5c983dae62"
   }, 
   "platform": "darwin", 
   "host": "somepersonslaptop.gateway", 
@@ -22,7 +22,16 @@
       }, 
       "test": [
         {
-          "output": "actionid: py27\nmsg: runtests\ncmdargs: ['/Users/anthonyshaw/repo/retox-2/.tox/py27/bin/python', 'setup.py', 'test']\n\nrunning test\nrunning egg_info\nwriting entry points to retox.egg-info/entry_points.txt\nwriting requirements to retox.egg-info/requires.txt\nwriting top-level names to retox.egg-info/top_level.txt\nwriting dependency_links to retox.egg-info/dependency_links.txt\nwriting retox.egg-info/PKG-INFO\nreading manifest file 'retox.egg-info/SOURCES.txt'\nreading manifest template 'MANIFEST.in'\nwarning: no files found matching 'AUTHORS.rst'\nwarning: no files found matching 'CONTRIBUTING.rst'\nwarning: no files found matching '*' under directory 'tests'\nwarning: no previously-included files matching '__pycache__' found under directory '*'\nwarning: no previously-included files matching '*.py[co]' found under directory '*'\nwarning: no files found matching '*.rst' under directory 'docs'\nwarning: no files found matching 'conf.py' under directory 'docs'\nwarning: no files found matching 'Makefile' under directory 'docs'\nwarning: no files found matching 'make.bat' under directory 'docs'\nwarning: no files found matching '*.jpg' under directory 'docs'\nwarning: no files found matching '*.png' under directory 'docs'\nwarning: no files found matching '*.gif' under directory 'docs'\nwriting manifest file 'retox.egg-info/SOURCES.txt'\nrunning build_ext\ntest_nothing (test.test_nothing.TestNothing) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n", 
+          "output": "actionid: py27\nmsg: runtests\ncmdargs: ['/Users/anthonyshaw/repo/retox-2/.tox/py27/bin/python', 'setup.py', 'test']\n\nrunning test\nrunning egg_info\nwriting retox.egg-info/PKG-INFO\nwriting entry points to retox.egg-info/entry_points.txt\nwriting top-level names to retox.egg-info/top_level.txt\nwriting requirements to retox.egg-info/requires.txt\nwriting dependency_links to retox.egg-info/dependency_links.txt\nreading manifest file 'retox.egg-info/SOURCES.txt'\nreading manifest template 'MANIFEST.in'\nwarning: no files found matching 'AUTHORS.rst'\nwarning: no files found matching 'CONTRIBUTING.rst'\nwarning: no files found matching '*' under directory 'tests'\nwarning: no previously-included files matching '__pycache__' found under directory '*'\nwarning: no previously-included files matching '*.py[co]' found under directory '*'\nwarning: no files found matching '*.rst' under directory 'docs'\nwarning: no files found matching 'conf.py' under directory 'docs'\nwarning: no files found matching 'Makefile' under directory 'docs'\nwarning: no files found matching 'make.bat' under directory 'docs'\nwarning: no files found matching '*.jpg' under directory 'docs'\nwarning: no files found matching '*.png' under directory 'docs'\nwarning: no files found matching '*.gif' under directory 'docs'\nwriting manifest file 'retox.egg-info/SOURCES.txt'\nrunning build_ext\ntest_nothing (test.test_nothing.TestNothing) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n", 
+          "command": [
+            "/Users/anthonyshaw/repo/retox-2/.tox/py27/bin/python", 
+            "setup.py", 
+            "test"
+          ], 
+          "retcode": "0"
+        }, 
+        {
+          "output": "actionid: py27\nmsg: runtests\ncmdargs: ['/Users/anthonyshaw/repo/retox-2/.tox/py27/bin/python', 'setup.py', 'test']\n\nrunning test\nrunning egg_info\nwriting retox.egg-info/PKG-INFO\nwriting entry points to retox.egg-info/entry_points.txt\nwriting top-level names to retox.egg-info/top_level.txt\nwriting requirements to retox.egg-info/requires.txt\nwriting dependency_links to retox.egg-info/dependency_links.txt\nreading manifest file 'retox.egg-info/SOURCES.txt'\nreading manifest template 'MANIFEST.in'\nwarning: no files found matching 'AUTHORS.rst'\nwarning: no files found matching 'CONTRIBUTING.rst'\nwarning: no files found matching '*' under directory 'tests'\nwarning: no previously-included files matching '__pycache__' found under directory '*'\nwarning: no previously-included files matching '*.py[co]' found under directory '*'\nwarning: no files found matching '*.rst' under directory 'docs'\nwarning: no files found matching 'conf.py' under directory 'docs'\nwarning: no files found matching 'Makefile' under directory 'docs'\nwarning: no files found matching 'make.bat' under directory 'docs'\nwarning: no files found matching '*.jpg' under directory 'docs'\nwarning: no files found matching '*.png' under directory 'docs'\nwarning: no files found matching '*.gif' under directory 'docs'\nwriting manifest file 'retox.egg-info/SOURCES.txt'\nrunning build_ext\ntest_nothing (test.test_nothing.TestNothing) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nOK\n", 
           "command": [
             "/Users/anthonyshaw/repo/retox-2/.tox/py27/bin/python", 
             "setup.py", 
@@ -32,6 +41,17 @@
         }
       ], 
       "setup": [
+        {
+          "output": "actionid: py27\nmsg: installpkg\ncmdargs: ['/Users/anthonyshaw/repo/retox-2/.tox/py27/bin/pip', 'install', '-U', '--no-deps', '/Users/anthonyshaw/repo/retox-2/.tox/dist/retox-1.1.1.zip']\n\nProcessing ./.tox/dist/retox-1.1.1.zip\nBuilding wheels for collected packages: retox\n  Running setup.py bdist_wheel for retox: started\n  Running setup.py bdist_wheel for retox: finished with status 'done'\n  Stored in directory: /Users/anthonyshaw/Library/Caches/pip/wheels/fb/05/c6/85a1f6ec0c683c14357073d27aca7072e0d12df3afeeb822ee\nSuccessfully built retox\nInstalling collected packages: retox\n  Found existing installation: retox 1.1.1\n    Not uninstalling retox at /Users/anthonyshaw/repo/retox-2, outside environment /Users/anthonyshaw/repo/retox-2/.tox/py27\nSuccessfully installed retox-1.1.1\n", 
+          "command": [
+            "/Users/anthonyshaw/repo/retox-2/.tox/py27/bin/pip", 
+            "install", 
+            "-U", 
+            "--no-deps", 
+            "/Users/anthonyshaw/repo/retox-2/.tox/dist/retox-1.1.1.zip"
+          ], 
+          "retcode": "0"
+        }, 
         {
           "output": "actionid: py27\nmsg: installpkg\ncmdargs: ['/Users/anthonyshaw/repo/retox-2/.tox/py27/bin/pip', 'install', '-U', '--no-deps', '/Users/anthonyshaw/repo/retox-2/.tox/dist/retox-1.1.1.zip']\n\nProcessing ./.tox/dist/retox-1.1.1.zip\nBuilding wheels for collected packages: retox\n  Running setup.py bdist_wheel for retox: started\n  Running setup.py bdist_wheel for retox: finished with status 'done'\n  Stored in directory: /Users/anthonyshaw/Library/Caches/pip/wheels/fb/05/c6/85a1f6ec0c683c14357073d27aca7072e0d12df3afeeb822ee\nSuccessfully built retox\nInstalling collected packages: retox\n  Found existing installation: retox 1.1.1\n    Not uninstalling retox at /Users/anthonyshaw/repo/retox-2, outside environment /Users/anthonyshaw/repo/retox-2/.tox/py27\nSuccessfully installed retox-1.1.1\n", 
           "command": [

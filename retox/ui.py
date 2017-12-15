@@ -57,6 +57,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
         Mark an action as started
         '''
         self._task_view.options.append((TASK_NAMES.get(activity, activity), self.name))
+        self._task_view.update(1)
         self._screen.force_update()
         self._screen.refresh()
 
@@ -69,6 +70,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
         except ValueError:
             retox_log.debug("Could not find action %s in env %s" % (activity, self.name))
         self._completed_view.options.append((TASK_NAMES.get(activity, activity), self.name))
+        self._completed_view.update(1)
         self._screen.force_update()
         self._screen.refresh()
 
@@ -84,6 +86,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
             self._completed_view.options.append(item)
         self._screen.force_update()
         self._screen.refresh()
+        self._update(1)
 
     def reset(self):
         '''
@@ -92,5 +95,6 @@ class VirtualEnvironmentFrame(widgets.Frame):
         self.palette['title'] = (Screen.COLOUR_WHITE, Screen.A_BOLD, Screen.COLOUR_BLUE)
         self._completed_view.options = []
         self._task_view.options = []
+        self._update(1)
         self._screen.force_update()
         self._screen.refresh()
