@@ -50,6 +50,7 @@ def main(args):
             if needs_update:
                 screen.print_at(u'Status : Running  ', 1, 1)
                 out = service.run(tox_args.envlist)
+                screen.refresh()
                 screen.print_at(u'Result : %s  ' % str(out), 1, 3)
                 needs_update = False
             else:

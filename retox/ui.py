@@ -58,6 +58,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
         '''
         self._task_view.options.append((TASK_NAMES.get(activity, activity), self.name))
         self._screen.force_update()
+        self._screen.refresh()
 
     def stop(self, activity, action):
         '''
@@ -69,6 +70,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
             retox_log.debug("Could not find action %s in env %s" % (activity, self.name))
         self._completed_view.options.append((TASK_NAMES.get(activity, activity), self.name))
         self._screen.force_update()
+        self._screen.refresh()
 
     def finish(self, status):
         '''
@@ -81,6 +83,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
             self._task_view.options.remove(item)
             self._completed_view.options.append(item)
         self._screen.force_update()
+        self._screen.refresh()
 
     def reset(self):
         '''
@@ -90,3 +93,4 @@ class VirtualEnvironmentFrame(widgets.Frame):
         self._completed_view.options = []
         self._task_view.options = []
         self._screen.force_update()
+        self._screen.refresh()
