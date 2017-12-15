@@ -12,7 +12,7 @@ To install, run
 
 .. code-block:: bash
 
-    pip install detox
+    pip install retox
 
 Then from any project that has a `tox.ini` file setup and using tox, you can simply run
 
