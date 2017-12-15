@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 import time
 import os
@@ -16,17 +17,18 @@ from retox.log import retox_log
 
 def main(args):
     retox_log.debug("Starting command")
+    retox_log.info("System stdout encoding is %s" % sys.stdout.encoding)
 
     # Use the Tox argparse logic
     tox_args = prepare(args)
-
+    tox_args.option.resultjson = '.retox.json'
     # Custom arguments for watching directories
     watch = tox_args.option.watch
     if watch is None:
         watch = []
 
     # Start a service and a green pool
-    screen = Screen.open()
+    screen = Screen.open(unicode_aware=True)
     service = RetoxService(tox_args, screen)
     service.start()
 
@@ -47,9 +49,8 @@ def main(args):
         while running:
             if needs_update:
                 screen.print_at(u'Status : Running  ', 1, 1)
-                screen.refresh()
                 out = service.run(tox_args.envlist)
-                screen.print_at(u'Result : %s  ' % out , 1, 3)
+                screen.print_at(u'Result : %s  ' % str(out), 1, 3)
                 needs_update = False
             else:
                 time.sleep(.5)
@@ -72,7 +73,9 @@ def main(args):
                 elif event.key_code == ord('r'):
                     needs_update = True
     except Exception as e:
-        retox_log.error("Process crash")
+        import traceback
+        retox_log.error("!!!!!! Process crash !!!!!!!")
+        retox_log.error(traceback.format_exc())
     finally:
         # TODO : Extra key for rebuilding tox virtualenvs
         retox_log.debug(u"Finished and exiting")

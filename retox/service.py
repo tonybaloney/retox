@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 
 from eventlet.green.subprocess import Popen
 import eventlet
+import eventlet.debug
 from eventlet import GreenPool
 
 import tox.session
@@ -20,6 +21,11 @@ class RetoxService(object):
         self._logger.debug('Instantiated service')
         self._resources = Resources(self)
         RetoxReporter.screen = screen
+        self.screen = screen
+
+        # Disabled eventlet dumping exceptions in threads
+        eventlet.debug.hub_exceptions(False)
+        eventlet.debug.tpool_exceptions(False)
 
     def start(self):
         eventlet.spawn_n(self.toxsession.report._loopreport)
@@ -41,10 +47,15 @@ class RetoxService(object):
         self._logger.info(' ---- Starting new test run ----')
 
         self._toxsession.report.reset()
+
         pool = GreenPool(size=self._toxconfig.option.numproc)
+
         for env in envlist:
             pool.spawn_n(self.runtests, env)
+
         pool.waitall()
+        self.screen.refresh()
+
         if not self.toxsession.config.option.sdistonly:
             retcode = self._toxsession._summary()
             return retcode
@@ -68,18 +79,19 @@ class RetoxService(object):
         if self.toxsession.config.option.sdistonly:
             self._logger.debug('Getting sdist resources')
             self._sdistpath = self.getresources("sdist")
+
             return
         if self.toxsession.config.skipsdist:
             self._logger.debug('Skipping sdist')
             venv, = self.getresources("venv:%s" % venvname)
             if venv:
                 self.toxsession.runtestenv(venv, redirect=True)
+
         else:
             venv, sdist = self.getresources("venv:%s" % venvname, "sdist")
             self._sdistpath = sdist
-
             self._logger.debug('Running tests')
-            
+
             if venv and sdist:
                 venv.status = 0
                 if self.toxsession.installpkg(venv, sdist):
@@ -88,6 +100,7 @@ class RetoxService(object):
                     self._logger.debug('Failed installing package')
             else:
                 self._logger.debug('VirtualEnv doesnt exist')
+
 
     def getresources(self, *specs):
         return self._resources.getresources(*specs)
