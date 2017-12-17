@@ -15,7 +15,7 @@ from retox.service import RetoxService
 from retox.log import retox_log
 
 
-def main(args):
+def main(args=sys.argv):
     retox_log.debug("Starting command")
     retox_log.info("System stdout encoding is %s" % sys.stdout.encoding)
 
