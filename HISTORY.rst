@@ -1,6 +1,12 @@
 Release History
 ===============
 
+1.2.1 (2017-12-17)
+------------------
+
+* Fixed issue where retox command was not starting, with error "TypeError: main() takes exactly 1 argument (0 given)"
+  See https://github.com/tonybaloney/retox/issues/3
+
 1.2.0 (2017-12-15)
 ------------------
 
