@@ -1,6 +1,8 @@
-from unittest.mock import patch
+# -*- coding: utf-8 -*-
 
-from six.moves import cStringIO
+from mock import patch
+
+from six.moves import cStringIO as StringIO
 import retox.log
 
 
