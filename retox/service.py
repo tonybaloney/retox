@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from  __future__ import absolute_import
+from __future__ import absolute_import
 from __future__ import unicode_literals
 
 from eventlet.green.subprocess import Popen
@@ -20,6 +20,7 @@ class RetoxService(object):
         self._logger = retox_log
         self._logger.debug('Instantiated service')
         self._resources = Resources(self)
+        self._sdistpath = None
         RetoxReporter.screen = screen
         self.screen = screen
 
@@ -83,16 +84,18 @@ class RetoxService(object):
             return
         if self.toxsession.config.skipsdist:
             self._logger.debug('Skipping sdist')
-            venv, = self.getresources("venv:%s" % venvname)
-            if venv:
-                self.toxsession.runtestenv(venv, redirect=True)
+            venv_resources = self.getresources("venv:%s" % venvname)
+            if venv_resources and len(venv_resources) > 0:
+                self.toxsession.runtestenv(venv_resources[0], redirect=True)
 
         else:
-            venv, sdist = self.getresources("venv:%s" % venvname, "sdist")
-            self._sdistpath = sdist
+            venv_resources = self.getresources("venv:%s" % venvname, "sdist")
+            self._sdistpath = venv_resources[1]
             self._logger.debug('Running tests')
 
-            if venv and sdist:
+            if len(venv_resources) > 1:
+                venv = venv_resources[0]
+                sdist = venv_resources[1]
                 venv.status = 0
                 if self.toxsession.installpkg(venv, sdist):
                     self.toxsession.runtestenv(venv, redirect=True)
@@ -100,7 +103,6 @@ class RetoxService(object):
                     self._logger.debug('Failed installing package')
             else:
                 self._logger.debug('VirtualEnv doesnt exist')
-
 
     def getresources(self, *specs):
         return self._resources.getresources(*specs)

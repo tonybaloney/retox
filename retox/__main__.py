@@ -73,7 +73,7 @@ def main(args=sys.argv):
                     needs_update = True
                 elif event.key_code == ord('r'):
                     needs_update = True
-    except Exception as e:
+    except Exception:
         import traceback
         retox_log.error("!!!!!! Process crash !!!!!!!")
         retox_log.error(traceback.format_exc())

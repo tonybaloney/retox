@@ -5,7 +5,7 @@ LEVEL = logging.INFO
 
 class RetoxLogging(object):
     '''
-    Create a special logging class that redirects stdout 
+    Create a special logging class that redirects stdout
     so it doesnt interfere with the screen session
     Write logging output to a file retox.log
     '''

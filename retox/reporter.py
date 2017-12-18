@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 import tox.session
 import eventlet
 from asciimatics.scene import Scene
-from asciimatics.screen import Screen
 
 from retox.ui import VirtualEnvironmentFrame
 from retox.log import retox_log
@@ -27,9 +26,6 @@ class FakeTerminalWriter(object):
 
 class RetoxReporter(tox.session.Reporter):
     screen = None
-
-    sortorder = ("runtests command installdeps installpkg inst inst-nodeps "
-        "sdist-make create recreate".split())
 
     def __init__(self, session):
         super(RetoxReporter, self).__init__(session)

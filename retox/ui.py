@@ -37,17 +37,15 @@ class VirtualEnvironmentFrame(widgets.Frame):
         completed_layout = widgets.Layout([10], fill_frame=False)
         self.add_layout(completed_layout)
         self._task_view = widgets.ListBox(
-                    10,
-                    [],
-                    name=u"Tasks",
-                    label=u"Running"
-                    )
+            10,
+            [],
+            name=u"Tasks",
+            label=u"Running")
         self._completed_view = widgets.ListBox(
-                    10,
-                    [],
-                    name=u"Completed",
-                    label=u"Completed"
-                    )
+            10,
+            [],
+            name=u"Completed",
+            label=u"Completed")
         task_layout.add_widget(self._task_view)
         completed_layout.add_widget(self._completed_view)
         self.fix()
