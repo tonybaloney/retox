@@ -1,9 +1,11 @@
-ReTox
+Retox
 =====
 
 A command line service that runs your tox tests in parallel, using threading and multicore CPUs.
 
 See your tox environments in a dashboard and automatically watch source folders for file changes and re-run tests.
+
+See : https://github.com/tonybaloney/retox/raw/master/docs/_static/screenshot.jpeg for an example screenshot
 
 Requirements
 ------------

@@ -1,6 +1,11 @@
 Release History
 ===============
 
+1.3.1 (2017-12-19)
+------------------
+
+* Fix small issue in readme not rendering on Pypi
+
 1.3.0 (2017-12-19)
 ------------------
 
