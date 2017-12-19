@@ -1,6 +1,15 @@
 Release History
 ===============
 
+1.3.0 (2017-12-19)
+------------------
+
+* Added a dashboard at the top
+* Individual task/action feedback for each virtualenv
+* Capture crashes within the threadpool into log files
+* Added tests and test structure, more ongoing
+* Fixed unicode related issue when running in Python 3.x https://github.com/tonybaloney/retox/issues/1
+
 1.2.1 (2017-12-17)
 ------------------
 
