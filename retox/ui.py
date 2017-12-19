@@ -22,18 +22,11 @@ TASK_NAMES = {
 }
 
 
-if sys.version_info.major == 2:
-    RESULT_MESSAGES = {
-        0: '[pass]',
-        'commands failed': '[fail]',
-        1: '[fail]'
-    }
-else:
-    RESULT_MESSAGES = {
-        0: u'✓',
-        'commands failed': u'✗',
-        1: u'✗'
-    }
+RESULT_MESSAGES = {
+    0: '[pass]',
+    'commands failed': '[fail]',
+    1: '[fail]'
+}
 
 
 def create_layout(config, screen):
@@ -130,10 +123,10 @@ class RetoxFrame(widgets.Frame, RetoxRefreshMixin):
     def last_result(self):
         return self._last_result
 
-    @status.setter
-    def set_last_result(self, value):
+    @last_result.setter
+    def last_result(self, value):
         self._last_result = value
-        self._last_result_label.text = '{0} : {1}'.format(
+        self._last_result_label.text = u'{0} : {1}'.format(
             'Result',
             RESULT_MESSAGES.get(value, str(value)))
         self.refresh()
