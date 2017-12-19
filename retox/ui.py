@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import unicode_literals
 
 import asciimatics.widgets as widgets
@@ -17,6 +19,10 @@ TASK_NAMES = {
     'getenv': u"Get environment"
 }
 
+RESULT_MESSAGES = {
+    0: u'✓',
+    'commands failed': u'✗'
+}
 
 class VirtualEnvironmentFrame(widgets.Frame):
     def __init__(self, screen, venv_name, venv_count, count):
@@ -54,23 +60,22 @@ class VirtualEnvironmentFrame(widgets.Frame):
         '''
         Mark an action as started
         '''
-        self._task_view.options.append((TASK_NAMES.get(activity, activity), self.name))
-        self._task_view.update(1)
-        self._screen.force_update()
-        self._screen.refresh()
+        try:
+            self._start_action(activity, action)
+        except ValueError:
+            retox_log.debug("Could not find action %s in env %s" % (activity, self.name))
+        self.refresh()
 
     def stop(self, activity, action):
         '''
         Mark a task as completed
         '''
         try:
-            self._task_view.options.remove((TASK_NAMES.get(activity, activity), self.name))
+            self._remove_running_action(activity, action)
         except ValueError:
             retox_log.debug("Could not find action %s in env %s" % (activity, self.name))
-        self._completed_view.options.append((TASK_NAMES.get(activity, activity), self.name))
-        self._completed_view.update(1)
-        self._screen.force_update()
-        self._screen.refresh()
+        self._mark_action_completed(activity, action)
+        self.refresh()
 
     def finish(self, status):
         '''
@@ -82,9 +87,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
         for item in list(self._task_view.options):
             self._task_view.options.remove(item)
             self._completed_view.options.append(item)
-        self._screen.force_update()
-        self._screen.refresh()
-        self._update(1)
+        self.refresh()
 
     def reset(self):
         '''
@@ -93,6 +96,23 @@ class VirtualEnvironmentFrame(widgets.Frame):
         self.palette['title'] = (Screen.COLOUR_WHITE, Screen.A_BOLD, Screen.COLOUR_BLUE)
         self._completed_view.options = []
         self._task_view.options = []
-        self._update(1)
+        self.refresh()
+
+    def refresh(self):
         self._screen.force_update()
         self._screen.refresh()
+        self._update(1)
+
+    def _start_action(self, activity, action):
+        self._task_view.options.append(self._make_list_item_from_action(activity, action))
+
+    def _remove_running_action(self, activity, action):
+        self._task_view.options.remove(self._make_list_item_from_action(activity, action))
+
+    def _mark_action_completed(self, activity, action):
+        name, value = self._make_list_item_from_action(activity, action)
+        name = RESULT_MESSAGES.get(action.venv.status, str(action.venv.status)) + ' ' + name
+        self._completed_view.options.append((name, value))
+
+    def _make_list_item_from_action(self, activity, action):
+        return TASK_NAMES.get(activity, activity), self.name
