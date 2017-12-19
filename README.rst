@@ -7,6 +7,8 @@ See your tox environments in a dashboard and automatically watch source folders 
 
 See : https://github.com/tonybaloney/retox/raw/master/docs/_static/screenshot.jpeg for an example screenshot
 
+.. image:: https://github.com/tonybaloney/retox/raw/master/docs/_static/retox_demo.gif
+
 Requirements
 ------------
 
