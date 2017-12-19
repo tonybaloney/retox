@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
-from __future__ import unicode_literals
 
 from eventlet.green.subprocess import Popen
 import eventlet
@@ -15,13 +14,16 @@ from retox.log import retox_log
 
 
 class RetoxService(object):
-    def __init__(self, toxconfig, screen):
+    def __init__(self, toxconfig, screen, env_frames):
         self._toxconfig = toxconfig
         self._logger = retox_log
         self._logger.debug('Instantiated service')
         self._resources = Resources(self)
         self._sdistpath = None
+
         RetoxReporter.screen = screen
+        RetoxReporter.env_frames = env_frames
+
         self.screen = screen
 
         # Disabled eventlet dumping exceptions in threads

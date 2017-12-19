@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
 import sys
 
 import asciimatics.widgets as widgets
@@ -26,16 +25,165 @@ TASK_NAMES = {
 if sys.version_info.major == 2:
     RESULT_MESSAGES = {
         0: '[pass]',
-        'commands failed': '[fail]'
+        'commands failed': '[fail]',
+        1: '[fail]'
     }
 else:
     RESULT_MESSAGES = {
         0: u'✓',
-        'commands failed': u'✗'
+        'commands failed': u'✗',
+        1: u'✗'
     }
 
 
-class VirtualEnvironmentFrame(widgets.Frame):
+def create_layout(config, screen):
+    _env_screens = {}
+    _log_screens = {}
+    count = 0
+
+    host_frame = RetoxFrame(screen, config)
+    for env in config.envlist:
+        _env_screens[env] = VirtualEnvironmentFrame(
+            screen,
+            env,
+            len(config.envlist),
+            count)
+        _log_screens[env] = LogFrame(
+            screen,
+            env,
+            len(config.envlist),
+            count)
+        count = count + 1
+    _scene = Scene([host_frame] + [frame for _, frame in _env_screens.items()], -1, name="Retox")
+    _log_scene = Scene([frame for _, frame in _log_screens.items()], duration=10, name="Logs")
+    return _env_screens, _scene, _log_scene, host_frame
+
+
+class RetoxRefreshMixin(object):
+    def refresh(self):
+        '''
+        Refresh the list and the screen
+        '''
+        self._screen.force_update()
+        self._screen.refresh()
+        self._update(1)
+
+
+class RetoxFrame(widgets.Frame, RetoxRefreshMixin):
+    '''
+    A UI frame for hosting the details of the overall host
+    '''
+
+    def __init__(self, screen, args):
+        '''
+        Create a new frame
+
+        :param screen: The screen instance
+        :type  screen: :class:`asciimatics.screen.Screen`
+
+        :param args:  The tox arguments
+        :type  args: ``object``
+        '''
+        super(RetoxFrame, self).__init__(
+            screen,
+            screen.height // 5,
+            screen.width,
+            x=0,
+            y=0,
+            has_border=True,
+            hover_focus=True,
+            title='Retox')
+        self._screen = screen
+        self._status = 'Starting'
+        self._last_result = ''
+
+        # Draw a box for the environment
+        header_layout = widgets.Layout([10], fill_frame=False)
+        self.add_layout(header_layout)
+
+        self._status_label = widgets.Label('Status')
+        header_layout.add_widget(self._status_label)
+
+        self._last_result_label = widgets.Label('Last Result')
+        header_layout.add_widget(self._last_result_label)
+
+        if args.option.watch:
+            self._watch_label = widgets.Label('Watching : %s  ' % ', '.join(args.option.watch))
+            header_layout.add_widget(self._watch_label)
+
+        self._commands_label = widgets.Label('Commands : (q) quit (b) build')
+        header_layout.add_widget(self._commands_label)
+        self.fix()
+        self.refresh()
+
+    @property
+    def status(self):
+        return self._status
+
+    @status.setter
+    def status(self, value):
+        self._status = value
+        self._status_label.text = 'Status : {0}'.format(value)
+        self.refresh()
+
+    @property
+    def last_result(self):
+        return self._last_result
+
+    @status.setter
+    def set_last_result(self, value):
+        self._last_result = value
+        self._last_result_label.text = '{0} : {1}'.format(
+            'Result',
+            RESULT_MESSAGES.get(value, str(value)))
+        self.refresh()
+
+
+class LogFrame(widgets.Frame, RetoxRefreshMixin):
+    '''
+    A UI frame for hosting the logs of a virtualenv
+    '''
+
+    def __init__(self, screen, venv_name, venv_count, index):
+        '''
+        Create a new frame
+
+        :param screen: The screen instance
+        :type  screen: :class:`asciimatics.screen.Screen`
+
+        :param venv_name: The name of this environment, e.g. py27
+        :type  venv_name: ``str``
+
+        :param venv_count: How many environments are there?
+        :type  venv_count: ``int``
+
+        :param index: which environment index is this
+        :type  index: ``int``
+        '''
+        super(LogFrame, self).__init__(
+            screen,
+            screen.height // 2,
+            screen.width // venv_count,
+            x=index * (screen.width // venv_count),
+            has_border=True,
+            hover_focus=True,
+            title=venv_name)
+        self.name = venv_name
+        self._screen = screen
+
+        # Draw a box for the environment
+        layout = widgets.Layout([10], fill_frame=False)
+        self.add_layout(layout)
+        self._logs = widgets.ListBox(
+            10,
+            [],
+            name="Logs",
+            label="Logs")
+        layout.add_widget(self._logs)
+        self.fix()
+
+
+class VirtualEnvironmentFrame(widgets.Frame, RetoxRefreshMixin):
     '''
     A UI frame for hosting the details of a virtualenv
     '''
@@ -60,7 +208,7 @@ class VirtualEnvironmentFrame(widgets.Frame):
             screen,
             screen.height // 2,
             screen.width // venv_count,
-            x=index * (screen.width // venv_count) + 1,
+            x=index * (screen.width // venv_count),
             has_border=True,
             hover_focus=True,
             title=venv_name)
@@ -75,31 +223,16 @@ class VirtualEnvironmentFrame(widgets.Frame):
         self._task_view = widgets.ListBox(
             10,
             [],
-            name=u"Tasks",
-            label=u"Running")
+            name="Tasks",
+            label="Running")
         self._completed_view = widgets.ListBox(
             10,
             [],
-            name=u"Completed",
-            label=u"Completed")
+            name="Completed",
+            label="Completed")
         task_layout.add_widget(self._task_view)
         completed_layout.add_widget(self._completed_view)
         self.fix()
-
-    @staticmethod
-    def create_screens(session, screen):
-        _env_screens = {}
-        count = 0
-        for env in session.config.envlist:
-            _env_screens[env] = VirtualEnvironmentFrame(
-                screen,
-                env,
-                len(session.config.envlist),
-                count)
-            count = count + 1
-        _scene = Scene([frame for _, frame in _env_screens.items()], -1, name="Retox")
-        screen.set_scenes([_scene], start_scene=_scene)
-        return _env_screens, _scene
 
     def start(self, activity, action):
         '''
@@ -157,14 +290,6 @@ class VirtualEnvironmentFrame(widgets.Frame):
         self._completed_view.options = []
         self._task_view.options = []
         self.refresh()
-
-    def refresh(self):
-        '''
-        Refresh the list and the screen
-        '''
-        self._screen.force_update()
-        self._screen.refresh()
-        self._update(1)
 
     def _start_action(self, activity, action):
         self._task_view.options.append(self._make_list_item_from_action(activity, action))

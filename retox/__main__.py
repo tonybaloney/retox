@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import time
 import os
@@ -11,7 +10,7 @@ from tox.session import prepare
 from asciimatics.screen import Screen
 from asciimatics.event import KeyboardEvent
 from retox.service import RetoxService
-
+from retox.ui import create_layout
 from retox.log import retox_log
 
 
@@ -22,49 +21,50 @@ def main(args=sys.argv):
     # Use the Tox argparse logic
     tox_args = prepare(args)
     tox_args.option.resultjson = '.retox.json'
+
     # Custom arguments for watching directories
-    watch = tox_args.option.watch
-    if watch is None:
-        watch = []
+    if tox_args.option.watch is None:
+        tox_args.option.watch = []
+    elif not isinstance(tox_args.option.watch, list):
+        tox_args.option.watch = [tox_args.option.watch]
 
     # Start a service and a green pool
     screen = Screen.open(unicode_aware=True)
-    service = RetoxService(tox_args, screen)
-    service.start()
 
     needs_update = True
     running = True
 
-    screen.print_at(u'Status : Starting  ', 1, 1)
+    env_frames, main_scene, log_scene, host_frame = create_layout(tox_args, screen)
 
-    if watch:
-        screen.print_at(u'Watching : %s  ' % ', '.join(watch), 1, 2)
+    service = RetoxService(tox_args, screen, env_frames)
+    service.start()
 
-    screen.print_at(u'Commands : (q) quit (b) build', 1, screen.height - 1)
+    host_frame.status = 'Starting'
 
     # Create a local dictionary of the files to see for differences
-    _watches = [get_hashes(w) for w in watch]
+    _watches = [get_hashes(w) for w in tox_args.option.watch]
 
     try:
+        screen.set_scenes([main_scene], start_scene=main_scene)
+
         while running:
             if needs_update:
-                screen.print_at(u'Status : Running  ', 1, 1)
+                host_frame.status = 'Running'
                 out = service.run(tox_args.envlist)
-                screen.refresh()
-                screen.print_at(u'Result : %s  ' % str(out), 1, 3)
+                host_frame.last_result = out
                 needs_update = False
             else:
                 time.sleep(.5)
 
-            if watch:
+            if tox_args.option.watch:
                 # Refresh the watch folders and check for changes
-                _new_watches = [get_hashes(w) for w in watch]
+                _new_watches = [get_hashes(w) for w in tox_args.option.watch]
                 changes = zip(_watches, _new_watches)
                 needs_update = any(x != y for x, y in changes)
                 _watches = _new_watches
 
-            screen.print_at(u'Status : Waiting  ', 1, 1)
-            screen.refresh()
+            host_frame.status = 'Waiting'
+
             event = screen.get_event()
             if isinstance(event, KeyboardEvent):
                 if event.key_code == ord('q'):
@@ -73,8 +73,9 @@ def main(args=sys.argv):
                     needs_update = True
                 elif event.key_code == ord('r'):
                     needs_update = True
-                elif event.key_code == ord('l'):
-                    show_logs(screen)
+                # elif event.key_code == ord('l'):
+                #     show_logs(screen, log_scene)
+
     except Exception:
         import traceback
         retox_log.error("!!!!!! Process crash !!!!!!!")
@@ -86,8 +87,14 @@ def main(args=sys.argv):
         screen.close(restore=True)
 
 
-def show_logs(screen):
-    pass
+def show_logs(screen, log_scene):
+    screen.set_scenes([log_scene], start_scene=log_scene)
+    running = True
+    while running:
+        event = screen.get_event()
+        if isinstance(event, KeyboardEvent):
+            if event.key_code == ord('q'):
+                running = False
 
 
 def get_hashes(path, ignore={'.pyc'}):
@@ -95,7 +102,7 @@ def get_hashes(path, ignore={'.pyc'}):
     Get a dictionary of file paths and timestamps
     '''
     out = {}
-    for root, dirs, files in os.walk(path):
+    for root, _, files in os.walk(path):
         path = root.split(os.sep)
         for file in files:
             for i in ignore:

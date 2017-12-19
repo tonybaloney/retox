@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 
 import tox.session
 import eventlet
 
-from retox.ui import VirtualEnvironmentFrame
 from retox.log import retox_log, catch_exceptions
 
 SHIFT = 20
@@ -29,6 +27,7 @@ class RetoxReporter(tox.session.Reporter):
     '''
 
     screen = None
+    env_frames = None
 
     def __init__(self, session):
         '''
@@ -42,8 +41,6 @@ class RetoxReporter(tox.session.Reporter):
 
         # Override default reporter functionality
         self.tw = FakeTerminalWriter()
-
-        self._env_screens, self._scene = VirtualEnvironmentFrame.create_screens(session, self.screen)
 
     def _loopreport(self):
         '''
@@ -67,14 +64,14 @@ class RetoxReporter(tox.session.Reporter):
     def logaction_start(self, action):
         if action.venv is not None:
             retox_log.debug("Started: %s %s" % (action.venv.name, action.activity))
-            self._env_screens[action.venv.name].start(action.activity, action)
+            self.env_frames[action.venv.name].start(action.activity, action)
         super(RetoxReporter, self).logaction_start(action)
 
     @catch_exceptions
     def logaction_finish(self, action):
         if action.venv is not None:
             retox_log.debug("Finished: %s %s" % (action.venv.name, action.activity))
-            self._env_screens[action.venv.name].stop(action.activity, action)
+            self.env_frames[action.venv.name].stop(action.activity, action)
         super(RetoxReporter, self).logaction_finish(action)
 
     def error(self, msg):
@@ -84,7 +81,7 @@ class RetoxReporter(tox.session.Reporter):
     @catch_exceptions
     def startsummary(self):
         retox_log.debug("Starting summary")
-        for frame_name, frame in self._env_screens.items():
+        for frame_name, frame in self.env_frames.items():
             for venv in self.session.venvlist:
                 if venv.name == frame_name:
                     try:
@@ -98,5 +95,5 @@ class RetoxReporter(tox.session.Reporter):
     def reset(self):
         self._actionmayfinish = set()
 
-        for _, frame in self._env_screens.items():
+        for _, frame in self.env_frames.items():
             frame.reset()

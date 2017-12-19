@@ -10,8 +10,10 @@ def catch_exceptions(f):
     def wrapper(*args, **kwds):
         try:
             return f(*args, **kwds)
-        except Exception as e:
-            retox_log.exception(e)
+        except Exception:
+            import traceback
+            retox_log.error("!!!!!! Process crash !!!!!!!")
+            retox_log.error(traceback.format_exc())
 
     return wrapper
 
