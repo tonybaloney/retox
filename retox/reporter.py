@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 import tox.session
 import eventlet
-from asciimatics.scene import Scene
 
 from retox.ui import VirtualEnvironmentFrame
 from retox.log import retox_log
@@ -25,29 +24,31 @@ class FakeTerminalWriter(object):
 
 
 class RetoxReporter(tox.session.Reporter):
+    '''
+    A custom tox reporter designed for updating a live UI
+    '''
+
     screen = None
 
     def __init__(self, session):
+        '''
+        Create a new reporter
+
+        :param session: The Tox Session
+        :type  session: :class:`tox.session.Session`
+        '''
         super(RetoxReporter, self).__init__(session)
-        self._env_count = len(session.config.envlist)
         self._actionmayfinish = set()
 
         # Override default reporter functionality
         self.tw = FakeTerminalWriter()
 
-        self._env_screens = {}
-        count = 0
-        for env in session.config.envlist:
-            self._env_screens[env] = VirtualEnvironmentFrame(
-                self.screen,
-                env,
-                self._env_count,
-                count)
-            count = count + 1
-        self._scene = Scene([frame for _, frame in self._env_screens.items()], -1, name="Retox")
-        self.screen.set_scenes([self._scene], start_scene=self._scene)
+        self._env_screens, self._scene = VirtualEnvironmentFrame.create_screens(session, self.screen)
 
     def _loopreport(self):
+        '''
+        Loop over the report progress
+        '''
         while 1:
             eventlet.sleep(0.2)
             ac2popenlist = {}

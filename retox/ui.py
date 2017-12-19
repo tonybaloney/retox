@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 
 import asciimatics.widgets as widgets
 from asciimatics.screen import Screen
+from asciimatics.scene import Scene
+
 from retox.log import retox_log
 
 TASK_NAMES = {
@@ -25,12 +27,31 @@ RESULT_MESSAGES = {
 }
 
 class VirtualEnvironmentFrame(widgets.Frame):
-    def __init__(self, screen, venv_name, venv_count, count):
+    '''
+    A UI frame for hosting the details of a virtualenv
+    '''
+
+    def __init__(self, screen, venv_name, venv_count, index):
+        '''
+        Create a new frame
+
+        :param screen: The screen instance
+        :type  screen: :class:`asciimatics.screen.Screen`
+
+        :param venv_name: The name of this environment, e.g. py27
+        :type  venv_name: ``str``
+
+        :param venv_count: How many environments are there?
+        :type  venv_count: ``int``
+
+        :param index: which environment index is this
+        :type  index: ``int``
+        '''
         super(VirtualEnvironmentFrame, self).__init__(
             screen,
             screen.height // 2,
             screen.width // venv_count,
-            x=count * (screen.width // venv_count) + 1,
+            x=index * (screen.width // venv_count) + 1,
             has_border=True,
             hover_focus=True,
             title=venv_name)
@@ -56,9 +77,30 @@ class VirtualEnvironmentFrame(widgets.Frame):
         completed_layout.add_widget(self._completed_view)
         self.fix()
 
+    @staticmethod
+    def create_screens(session, screen):
+        _env_screens = {}
+        count = 0
+        for env in session.config.envlist:
+            _env_screens[env] = VirtualEnvironmentFrame(
+                screen,
+                env,
+                len(session.config.envlist),
+                count)
+            count = count + 1
+        _scene = Scene([frame for _, frame in _env_screens.items()], -1, name="Retox")
+        screen.set_scenes([_scene], start_scene=_scene)
+        return _env_screens, _scene
+
     def start(self, activity, action):
         '''
         Mark an action as started
+
+        :param activity: The virtualenv activity name
+        :type  activity: ``str``
+
+        :param action: The virtualenv action
+        :type  action: :class:`tox.session.Action`
         '''
         try:
             self._start_action(activity, action)
@@ -69,6 +111,12 @@ class VirtualEnvironmentFrame(widgets.Frame):
     def stop(self, activity, action):
         '''
         Mark a task as completed
+
+        :param activity: The virtualenv activity name
+        :type  activity: ``str``
+
+        :param action: The virtualenv action
+        :type  action: :class:`tox.session.Action`
         '''
         try:
             self._remove_running_action(activity, action)
@@ -80,6 +128,9 @@ class VirtualEnvironmentFrame(widgets.Frame):
     def finish(self, status):
         '''
         Move laggard tasks over
+
+        :param activity: The virtualenv status
+        :type  activity: ``str``
         '''
         retox_log.info("Completing %s with status %s" % (self.name, status))
         result = Screen.COLOUR_GREEN if not status else Screen.COLOUR_RED
@@ -99,6 +150,9 @@ class VirtualEnvironmentFrame(widgets.Frame):
         self.refresh()
 
     def refresh(self):
+        '''
+        Refresh the list and the screen
+        '''
         self._screen.force_update()
         self._screen.refresh()
         self._update(1)
@@ -116,3 +170,4 @@ class VirtualEnvironmentFrame(widgets.Frame):
 
     def _make_list_item_from_action(self, activity, action):
         return TASK_NAMES.get(activity, activity), self.name
+

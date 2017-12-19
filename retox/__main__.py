@@ -73,6 +73,8 @@ def main(args=sys.argv):
                     needs_update = True
                 elif event.key_code == ord('r'):
                     needs_update = True
+                elif event.key_code == ord('l'):
+                    show_logs(screen)
     except Exception:
         import traceback
         retox_log.error("!!!!!! Process crash !!!!!!!")
@@ -83,6 +85,9 @@ def main(args=sys.argv):
         screen.clear()
         screen.close(restore=True)
 
+
+def show_logs(screen):
+    pass
 
 def get_hashes(path, ignore={'.pyc'}):
     '''
