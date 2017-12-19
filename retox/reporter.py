@@ -5,7 +5,7 @@ import tox.session
 import eventlet
 
 from retox.ui import VirtualEnvironmentFrame
-from retox.log import retox_log
+from retox.log import retox_log, catch_exceptions
 
 SHIFT = 20
 
@@ -63,12 +63,14 @@ class RetoxReporter(tox.session.Reporter):
 
             self.screen.draw_next_frame(repeat=False)
 
+    @catch_exceptions
     def logaction_start(self, action):
         if action.venv is not None:
             retox_log.debug("Started: %s %s" % (action.venv.name, action.activity))
             self._env_screens[action.venv.name].start(action.activity, action)
         super(RetoxReporter, self).logaction_start(action)
 
+    @catch_exceptions
     def logaction_finish(self, action):
         if action.venv is not None:
             retox_log.debug("Finished: %s %s" % (action.venv.name, action.activity))
@@ -79,6 +81,7 @@ class RetoxReporter(tox.session.Reporter):
         # TODO : Raise errors in a panel
         self.logline("ERROR: " + msg, red=True)
 
+    @catch_exceptions
     def startsummary(self):
         retox_log.debug("Starting summary")
         for frame_name, frame in self._env_screens.items():

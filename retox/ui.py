@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+import sys
 
 import asciimatics.widgets as widgets
 from asciimatics.screen import Screen
@@ -21,10 +22,18 @@ TASK_NAMES = {
     'getenv': u"Get environment"
 }
 
-RESULT_MESSAGES = {
-    0: u'✓',
-    'commands failed': u'✗'
-}
+
+if sys.version_info.major == 2:
+    RESULT_MESSAGES = {
+        0: '[pass]',
+        'commands failed': '[fail]'
+    }
+else:
+    RESULT_MESSAGES = {
+        0: u'✓',
+        'commands failed': u'✗'
+    }
+
 
 class VirtualEnvironmentFrame(widgets.Frame):
     '''
@@ -170,4 +179,3 @@ class VirtualEnvironmentFrame(widgets.Frame):
 
     def _make_list_item_from_action(self, activity, action):
         return TASK_NAMES.get(activity, activity), self.name
-

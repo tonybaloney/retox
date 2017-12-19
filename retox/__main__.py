@@ -89,6 +89,7 @@ def main(args=sys.argv):
 def show_logs(screen):
     pass
 
+
 def get_hashes(path, ignore={'.pyc'}):
     '''
     Get a dictionary of file paths and timestamps

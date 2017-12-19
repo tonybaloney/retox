@@ -1,6 +1,19 @@
 # -*- coding: utf-8 -*-
 import logging
+from functools import wraps
+
 LEVEL = logging.INFO
+
+
+def catch_exceptions(f):
+    @wraps(f)
+    def wrapper(*args, **kwds):
+        try:
+            return f(*args, **kwds)
+        except Exception as e:
+            retox_log.exception(e)
+
+    return wrapper
 
 
 class RetoxLogging(object):
