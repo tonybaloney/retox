@@ -5,6 +5,12 @@ A command line service that runs your tox tests in parallel, using threading and
 
 See your tox environments in a dashboard and automatically watch source folders for file changes and re-run tests.
 
+.. image:: https://github.com/tonybaloney/retox/raw/master/docs/_static/screenshot.jpeg
+   :height: 180px
+   :width: 400px
+   :align: middle
+   :target: https://github.com/tonybaloney/retox/raw/master/docs/_static/screenshot.jpeg
+
 Requirements
 ------------
 
