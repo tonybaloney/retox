@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import sys
-
 import asciimatics.widgets as widgets
 from asciimatics.screen import Screen
 from asciimatics.scene import Scene

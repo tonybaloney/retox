@@ -130,9 +130,9 @@ class Resources(object):
                 if spec not in self._spec2thread:
                     t = self._pool.spawn(self._dispatchprovider, spec)
                     self._spec2thread[spec] = t
-        l = []
+        lst = []
         for spec in specs:
             if spec not in self._resources:
                 self._spec2thread[spec].wait()
-            l.append(self._resources[spec])
-        return l
+            lst.append(self._resources[spec])
+        return lst
