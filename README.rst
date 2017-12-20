@@ -1,6 +1,23 @@
 Retox
 =====
 
+.. image:: https://img.shields.io/pypi/v/retox.svg
+        :target: https://pypi.python.org/pypi/retox
+
+.. image:: https://img.shields.io/travis/tonybaloney/retox.svg
+        :target: https://travis-ci.org/tonybaloney/retox
+
+.. image:: https://codecov.io/gh/tonybaloney/retox/branch/master/graph/badge.svg
+        :target: https://codecov.io/gh/tonybaloney/retox
+
+.. image:: https://pyup.io/repos/github/tonybaloney/retox/shield.svg
+     :target: https://pyup.io/repos/github/tonybaloney/retox/
+     :alt: Updates
+
+.. image:: https://pyup.io/repos/github/tonybaloney/retox/python-3-shield.svg
+     :target: https://pyup.io/repos/github/tonybaloney/retox/
+     :alt: Python 3
+
 A command line service that runs your tox tests in parallel, using threading and multicore CPUs.
 
 See your tox environments in a dashboard and automatically watch source folders for file changes and re-run tests.
