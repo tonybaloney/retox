@@ -97,7 +97,7 @@ def show_logs(screen, log_scene):
                 running = False
 
 
-def get_hashes(path, ignore={'.pyc'}):
+def get_hashes(path, include={'.py'}):
     '''
     Get a dictionary of file paths and timestamps
     '''
@@ -105,8 +105,8 @@ def get_hashes(path, ignore={'.pyc'}):
     for root, _, files in os.walk(path):
         path = root.split(os.sep)
         for file in files:
-            for i in ignore:
-                if not file.endswith(i):
+            for i in include:
+                if file.endswith(i):
                     pytime = os.path.getmtime(os.path.join(root, file))
                     out[os.path.join(root, file)] = pytime
     return out
