@@ -1,0 +1,4 @@
+tox-travis
+codecov
+pytest
+pytest-cov

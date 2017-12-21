@@ -1,6 +1,11 @@
 Release History
 ===============
 
+1.4.0 (unreleased)
+------------------
+
+* Directory watching only includes .py files now, so log files are ignored
+
 1.3.1 (2017-12-19)
 ------------------
 
