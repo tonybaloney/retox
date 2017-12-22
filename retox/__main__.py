@@ -75,6 +75,9 @@ def main(args=sys.argv):
                     needs_update = True
                 # elif event.key_code == ord('l'):
                 #     show_logs(screen, log_scene)
+    except TypeError:
+        buffer = sys.stdout.getbuffer()
+        print(buffer)
 
     except Exception:
         import traceback
