@@ -2,9 +2,11 @@
 
 from __future__ import absolute_import
 
+import argparse
 import os
 
 from retox.__main__ import get_hashes
+import retox.watch
 
 
 def test_get_simple_hashes():
@@ -37,3 +39,14 @@ def test_get_simple_hashes_timestamps():
 
     os_time = os.path.getmtime('test/test_watch/file1.py')
     assert hashes['test/test_watch/file1.py'] == os_time
+
+
+def test_multiple_watch_args():
+    '''
+    Test that multiple `-w` flags are respected.
+    '''
+    parser = argparse.ArgumentParser()
+    retox.watch.tox_addoption(parser)
+    args = parser.parse_args(['-w', 'dir1', '-w', 'dir2'])
+    assert 'dir1' in args.watch
+    assert 'dir2' in args.watch
