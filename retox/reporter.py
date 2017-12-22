@@ -42,6 +42,10 @@ class RetoxReporter(tox.session.Reporter):
         # Override default reporter functionality
         self.tw = FakeTerminalWriter()
 
+    @classmethod
+    def set_env_frames(cls, env_frames):
+        cls.env_frames = env_frames
+
     def _loopreport(self):
         '''
         Loop over the report progress

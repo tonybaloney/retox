@@ -22,7 +22,7 @@ class RetoxService(object):
         self._sdistpath = None
 
         RetoxReporter.screen = screen
-        RetoxReporter.env_frames = env_frames
+        RetoxReporter.set_env_frames(env_frames)
 
         self.screen = screen
 
