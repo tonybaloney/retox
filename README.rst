@@ -66,6 +66,17 @@ Any tox arguments can be given to the command, and using --help to get a full li
 
     retox -e py27,py36
 
+multicore configuration
+-----------------------
+
+The number of concurrent processes in the threadpool can be set using the -n parameter.
+By default this will be equal to the number of CPU's on the OS. If you want to expand or throttle this, use the
+flag to change the size of the threadpool.
+
+.. code-block:: bash
+
+    retox -n 4
+
 Logging
 -------
 

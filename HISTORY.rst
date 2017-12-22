@@ -1,10 +1,11 @@
 Release History
 ===============
 
-1.4.0 (unreleased)
+1.4.0 (2017-12-23)
 ------------------
 
 * Directory watching only includes .py files now, so log files are ignored
+* Fix bug where multiple watch folders would not be watched (@bstpierre)
 
 1.3.1 (2017-12-19)
 ------------------
