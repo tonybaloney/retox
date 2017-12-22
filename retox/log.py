@@ -57,6 +57,7 @@ class RetoxLogging(object):
     def addHandler(self, handler):
         self.logger.addHandler(handler)
 
+
 logging.basicConfig(level=logging.ERROR)
 
 retox_log = RetoxLogging()
