@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
 
 
-def test_nothing(self):
+def test_nothing():
     assert 1 == 1

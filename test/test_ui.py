@@ -2,15 +2,18 @@
 
 from __future__ import absolute_import
 
-from asciimatics.screen import Screen
 import retox.ui as ui
+from tox.config import parseconfig
+from . import MockScreen
 
 
 def test_create_layout():
     '''
     Test the creation of layouts with virtual environments
     '''
-    screen = Screen(300, 400, 1, True)
-    config = 1
+    screen = MockScreen()
+    config = parseconfig([])
     screens, scene, log, host = ui.create_layout(config, screen)
     assert screens is not None
+    assert len(screens) == len(config.envlist)
+    assert len(log._effects) == len(screens)
