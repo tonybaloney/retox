@@ -14,6 +14,9 @@ from retox.ui import create_layout
 from retox.log import retox_log
 
 
+MAX_RUNS = -1
+
+
 def main(args=sys.argv):
     retox_log.debug("Starting command")
     retox_log.info("System stdout encoding is %s" % sys.stdout.encoding)
@@ -43,13 +46,14 @@ def main(args=sys.argv):
 
     # Create a local dictionary of the files to see for differences
     _watches = [get_hashes(w) for w in tox_args.option.watch]
-
+    run_count = 0
     try:
         screen.set_scenes([main_scene], start_scene=main_scene)
 
         while running:
             if needs_update:
                 host_frame.status = 'Running'
+                run_count = run_count + 1
                 out = service.run(tox_args.envlist)
                 host_frame.last_result = out
                 needs_update = False
@@ -73,12 +77,10 @@ def main(args=sys.argv):
                     needs_update = True
                 elif event.key_code == ord('r'):
                     needs_update = True
+                if MAX_RUNS != -1 and run_count >= MAX_RUNS:
+                    running = False
                 # elif event.key_code == ord('l'):
                 #     show_logs(screen, log_scene)
-    except TypeError:
-        buffer = sys.stdout.getbuffer()
-        print(buffer)
-
     except Exception:
         import traceback
         retox_log.error("!!!!!! Process crash !!!!!!!")
@@ -88,6 +90,7 @@ def main(args=sys.argv):
         retox_log.debug(u"Finished and exiting")
         screen.clear()
         screen.close(restore=True)
+    return out
 
 
 def show_logs(screen, log_scene):
