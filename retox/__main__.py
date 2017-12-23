@@ -78,7 +78,6 @@ def main(args=sys.argv):
                     needs_update = True
                 elif event.key_code == ord('r'):
                     needs_update = True
-                
                 # elif event.key_code == ord('l'):
                 #     show_logs(screen, log_scene)
     except Exception:
