@@ -42,6 +42,10 @@ class RetoxReporter(tox.session.Reporter):
         # Override default reporter functionality
         self.tw = FakeTerminalWriter()
 
+    @classmethod
+    def set_env_frames(cls, env_frames):
+        cls.env_frames = env_frames
+
     def _loopreport(self):
         '''
         Loop over the report progress
@@ -52,8 +56,8 @@ class RetoxReporter(tox.session.Reporter):
             for action in self.session._actions:
                 for popen in action._popenlist:
                     if popen.poll() is None:
-                        l = ac2popenlist.setdefault(action.activity, [])
-                        l.append(popen)
+                        lst = ac2popenlist.setdefault(action.activity, [])
+                        lst.append(popen)
                 if not action._popenlist and action in self._actionmayfinish:
                     super(RetoxReporter, self).logaction_finish(action)
                     self._actionmayfinish.remove(action)
