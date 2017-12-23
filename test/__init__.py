@@ -5,6 +5,7 @@ from asciimatics.screen import Screen
 class MockScreen(Screen):
     def __init__(self):
         super(MockScreen, self).__init__(100, 200, 1, True)
+        self._buffer = []
 
     @classmethod
     def open(cls, unicode_aware=False):
@@ -26,7 +27,7 @@ class MockScreen(Screen):
         pass
 
     def _print_at(self, text, x, y, width):
-        pass
+        self._buffer.append(text)
 
     def _scroll(self, lines):
         pass

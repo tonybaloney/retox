@@ -2,8 +2,6 @@
 
 from __future__ import absolute_import
 
-from mock import patch
-import asciimatics.screen
 import retox.__main__ as main
 from . import MockScreen
 
@@ -17,3 +15,5 @@ def test_main_entry_point():
     '''
     ret = main.main(['-e', 'test'])
     assert ret == 0
+
+    
