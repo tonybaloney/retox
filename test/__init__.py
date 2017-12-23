@@ -6,6 +6,10 @@ class MockScreen(Screen):
     def __init__(self):
         super(MockScreen, self).__init__(100, 200, 1, True)
 
+    @classmethod
+    def open(cls, unicode_aware=False):
+        return MockScreen()
+
     def set_title(self, title):
         self.title = title
 

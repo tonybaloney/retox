@@ -59,7 +59,8 @@ def main(args=sys.argv):
                 needs_update = False
             else:
                 time.sleep(.5)
-
+            if MAX_RUNS != -1 and run_count >= MAX_RUNS:
+                running = False
             if tox_args.option.watch:
                 # Refresh the watch folders and check for changes
                 _new_watches = [get_hashes(w) for w in tox_args.option.watch]
@@ -77,8 +78,7 @@ def main(args=sys.argv):
                     needs_update = True
                 elif event.key_code == ord('r'):
                     needs_update = True
-                if MAX_RUNS != -1 and run_count >= MAX_RUNS:
-                    running = False
+                
                 # elif event.key_code == ord('l'):
                 #     show_logs(screen, log_scene)
     except Exception:
