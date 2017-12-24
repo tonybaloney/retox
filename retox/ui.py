@@ -102,6 +102,11 @@ class RetoxFrame(widgets.Frame, RetoxRefreshMixin):
             self._watch_label = widgets.Label('Watching : %s  ' % ', '.join(args.option.watch))
             header_layout.add_widget(self._watch_label)
 
+        if args.option.exclude:
+            self._exclude_label = widgets.Label(
+                'Excluding : %s  ' % args.option.exclude)
+            header_layout.add_widget(self._exclude_label)
+
         self._commands_label = widgets.Label('Commands : (q) quit (b) build')
         header_layout.add_widget(self._commands_label)
         self.fix()

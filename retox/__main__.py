@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 
 import time
-import os
+import re
 import sys
 
 from tox.session import prepare
@@ -12,6 +12,7 @@ from asciimatics.event import KeyboardEvent
 from retox.service import RetoxService
 from retox.ui import create_layout
 from retox.log import retox_log
+from retox.path import Path
 
 
 def main(args=sys.argv):
@@ -41,8 +42,10 @@ def main(args=sys.argv):
 
     host_frame.status = 'Starting'
 
+    exclude = tox_args.option.exclude
+
     # Create a local dictionary of the files to see for differences
-    _watches = [get_hashes(w) for w in tox_args.option.watch]
+    _watches = [get_hashes(w, exclude) for w in tox_args.option.watch]
 
     try:
         screen.set_scenes([main_scene], start_scene=main_scene)
@@ -58,7 +61,7 @@ def main(args=sys.argv):
 
             if tox_args.option.watch:
                 # Refresh the watch folders and check for changes
-                _new_watches = [get_hashes(w) for w in tox_args.option.watch]
+                _new_watches = [get_hashes(w, exclude) for w in tox_args.option.watch]
                 changes = zip(_watches, _new_watches)
                 needs_update = any(x != y for x, y in changes)
                 _watches = _new_watches
@@ -97,18 +100,22 @@ def show_logs(screen, log_scene):
                 running = False
 
 
-def get_hashes(path, include={'.py'}):
+def get_hashes(path, exclude=None):
     '''
-    Get a dictionary of file paths and timestamps
+    Get a dictionary of file paths and timestamps.
+
+    Paths matching `exclude` regex will be excluded.
     '''
     out = {}
-    for root, _, files in os.walk(path):
-        path = root.split(os.sep)
-        for file in files:
-            for i in include:
-                if file.endswith(i):
-                    pytime = os.path.getmtime(os.path.join(root, file))
-                    out[os.path.join(root, file)] = pytime
+    for f in Path(path).rglob('*'):
+        if f.is_dir():
+            # We want to watch files, not directories.
+            continue
+        if exclude and re.match(exclude, f.as_posix()):
+            retox_log.debug("excluding '{}'".format(f.as_posix()))
+            continue
+        pytime = f.stat().st_mtime
+        out[f.as_posix()] = pytime
     return out
 
 
