@@ -57,6 +57,15 @@ Retox can watch one or many directories for file changes and re-run the tox envi
 
     retox -w my_project_folder -w my_test_folder
 
+Excluding paths
+---------------
+
+Retox will ignore files matching a given regex:
+
+.. code-block:: bash
+
+    retox -w my_project_folder --exclude='.*\.(swp|pyc)$'
+
 Tox support
 -----------
 

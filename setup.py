@@ -12,7 +12,9 @@ requirements = [
     'tox==2.9.1',
     'eventlet==0.21.0',
     'asciimatics==1.9.0',
+    'pathlib2==2.3.0',
 ]
+
 
 def main():
     setup(
@@ -38,7 +40,9 @@ def main():
         packages=['retox', ],
         install_requires=[requirements],
         entry_points={'console_scripts': 'retox=retox.__main__:main',
-                      'tox': ['proclimit = retox.proclimit', 'watch = retox.watch']},
+                      'tox': ['exclude = retox.exclude',
+                              'proclimit = retox.proclimit',
+                              'watch = retox.watch']},
     )
 
 if __name__ == '__main__':
