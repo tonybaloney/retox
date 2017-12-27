@@ -7,6 +7,8 @@ import eventlet
 import eventlet.debug
 from eventlet import GreenPool
 
+from datetime import datetime
+
 import tox.session
 
 from retox.reporter import RetoxReporter
@@ -47,7 +49,7 @@ class RetoxService(object):
         self._logger.info(' ')
         self._logger.info(' ')
         self._logger.info(' ')
-        self._logger.info(' ---- Starting new test run ----')
+        self._logger.info(' ---- Starting new test run at {0}----'.format(datetime.utcnow()))
 
         self._toxsession.report.reset()
 
