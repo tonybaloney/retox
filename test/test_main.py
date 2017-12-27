@@ -15,5 +15,3 @@ def test_main_entry_point():
     '''
     ret = main.main(['-e', 'test'])
     assert ret == 0
-
-    
