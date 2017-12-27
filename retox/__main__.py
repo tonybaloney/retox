@@ -43,8 +43,6 @@ def main(args=sys.argv):
     service = RetoxService(tox_args, screen, env_frames)
     service.start()
 
-    host_frame.status = 'Starting'
-
     exclude = tox_args.option.exclude
 
     # Create a local dictionary of the files to see for differences
