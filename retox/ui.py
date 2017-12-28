@@ -28,6 +28,15 @@ RESULT_MESSAGES = {
 
 
 def create_layout(config, screen):
+    '''
+    Create a UI layout from a Tox config
+
+    :param config: The config object instance
+    :type  config: :class:`tox.Config`
+
+    :param screen: The asciimatics screen instance
+    :type  screen: :class:`asciimatics.screen.Screen`
+    '''
     _env_screens = {}
     _log_screens = {}
     count = 0

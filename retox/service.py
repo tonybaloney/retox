@@ -49,7 +49,7 @@ class RetoxService(object):
         self._logger.info(' ')
         self._logger.info(' ')
         self._logger.info(' ')
-        self._logger.info(' ---- Starting new test run at {0}----'.format(datetime.utcnow()))
+        self._logger.info(' ---- Starting new test run at {0} ----'.format(datetime.utcnow()))
 
         self._toxsession.report.reset()
 

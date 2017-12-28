@@ -4,16 +4,23 @@ from asciimatics.screen import Screen
 
 class MockScreen(Screen):
     buffer = []
+    height = 100
+    width = 600
+    colours = []
 
     def __init__(self):
-        super(MockScreen, self).__init__(100, 200, 1, True)
+        super(MockScreen, self).__init__(MockScreen.height, MockScreen.width, 1, True)
 
-    @classmethod
-    def open(cls, unicode_aware=False):
-        return MockScreen()
+    def _change_colours(self, colour, attr, bg):
+        super(MockScreen, self)._change_colours(colour, attr, bg)
 
     def set_title(self, title):
         self.title = title
+
+    def _print_at(self, text, x, y, width):
+        self.buffer.append(text)
+        assert isinstance(text, str)
+        # super(MockScreen, self)._print_at(text, x, y, width)
 
     def has_resized(self):
         pass
@@ -24,15 +31,18 @@ class MockScreen(Screen):
     def close(self, restore=True):
         pass
 
-    def _change_colours(self, colour, attr, bg):
-        pass
-
-    def _print_at(self, text, x, y, width):
-        self.buffer.append(text)
-        assert isinstance(text, str)
-
     def _scroll(self, lines):
         pass
 
     def _clear(self):
         pass
+
+    def refresh(self):
+        """
+        Refresh the screen.
+        """
+        super(MockScreen, self).refresh()
+
+    @staticmethod
+    def _safe_write(msg):
+        MockScreen.buffer.append(msg)
