@@ -34,22 +34,22 @@ def main(args=sys.argv):
 
     # Start a service and a green pool
     screen = Screen.open(unicode_aware=True)
-
-    needs_update = True
-    running = True
-
-    env_frames, main_scene, log_scene, host_frame = create_layout(tox_args, screen)
-
-    service = RetoxService(tox_args, screen, env_frames)
-    service.start()
-
-    exclude = tox_args.option.exclude
-
-    # Create a local dictionary of the files to see for differences
-    run_count = 0
-    _watches = [get_hashes(w, exclude) for w in tox_args.option.watch]
-
     try:
+
+        needs_update = True
+        running = True
+
+        env_frames, main_scene, log_scene, host_frame = create_layout(tox_args, screen)
+
+        service = RetoxService(tox_args, screen, env_frames)
+        service.start()
+
+        exclude = tox_args.option.exclude
+
+        # Create a local dictionary of the files to see for differences
+        run_count = 0
+        _watches = [get_hashes(w, exclude) for w in tox_args.option.watch]
+
         screen.set_scenes([main_scene], start_scene=main_scene)
 
         while running:
@@ -86,6 +86,8 @@ def main(args=sys.argv):
         import traceback
         retox_log.error("!!!!!! Process crash !!!!!!!")
         retox_log.error(traceback.format_exc())
+    except SystemExit as exit_message:
+        out = exit_message.code
     finally:
         # TODO : Extra key for rebuilding tox virtualenvs
         retox_log.debug(u"Finished and exiting")
