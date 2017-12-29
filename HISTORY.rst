@@ -1,6 +1,11 @@
 Release History
 ===============
 
+1.5.0 (2017-12-30)
+------------------
+
+* Added --exclude flag to pass a regex string of which files should be ignored by the watcher
+
 1.4.0 (2017-12-23)
 ------------------
 
