@@ -19,6 +19,7 @@ MAX_RUNS = -1
 
 
 def main(args=sys.argv):
+    out = -1
     retox_log.debug("Starting command")
     retox_log.info("System stdout encoding is %s" % sys.stdout.encoding)
 
@@ -70,18 +71,19 @@ def main(args=sys.argv):
                 needs_update = any(x != y for x, y in changes)
                 _watches = _new_watches
 
-            host_frame.status = 'Waiting'
+            if MAX_RUNS == -1:
+                host_frame.status = 'Waiting'
 
-            event = screen.get_event()
-            if isinstance(event, KeyboardEvent):
-                if event.key_code == ord('q'):
-                    running = False
-                elif event.key_code == ord('b'):
-                    needs_update = True
-                elif event.key_code == ord('r'):
-                    needs_update = True
-                # elif event.key_code == ord('l'):
-                #     show_logs(screen, log_scene)
+                event = screen.get_event()
+                if isinstance(event, KeyboardEvent):
+                    if event.key_code == ord('q'):
+                        running = False
+                    elif event.key_code == ord('b'):
+                        needs_update = True
+                    elif event.key_code == ord('r'):
+                        needs_update = True
+                    # elif event.key_code == ord('l'):
+                    #     show_logs(screen, log_scene)
     except Exception:
         import traceback
         retox_log.error("!!!!!! Process crash !!!!!!!")

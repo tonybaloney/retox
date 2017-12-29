@@ -25,7 +25,7 @@ class RetoxReporter(tox.session.Reporter):
     '''
     A custom tox reporter designed for updating a live UI
     '''
-
+    verbosity = 1
     screen = None
     env_frames = None
 

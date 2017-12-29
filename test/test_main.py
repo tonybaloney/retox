@@ -81,6 +81,9 @@ def fake_scr():
         def refresh(self,):
             pass
 
+        def getch(self):
+            return 0
+
     return scr()
 
 
