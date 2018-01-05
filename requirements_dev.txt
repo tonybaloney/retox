@@ -1,4 +1,4 @@
 tox-travis
-codecov
 pytest==3.3.2
-pytest-cov
+codecov==2.0.12
+pytest-cov==2.5.1
